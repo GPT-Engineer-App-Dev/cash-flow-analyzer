@@ -20,11 +20,25 @@ const Layout = () => {
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <MobileSidebar />
-          <div className="w-full flex-1">{/* Add nav bar content here! */}</div>
+          <div className="w-full flex-1 flex justify-between items-center">
+            <nav className="hidden md:flex md:items-center md:gap-5 lg:gap-6 text-lg font-medium md:text-sm">
+              <NavItem to="/">Dashboard</NavItem>
+              <NavItem to="/reports">Reports</NavItem>
+              <NavItem to="/settings">Settings</NavItem>
+            </nav>
+            <UserDropdown />
+          </div>
         </header>
         <main className="flex-grow p-4 overflow-auto">
           <Outlet />
         </main>
+        <footer className="border-t py-4 px-6 text-center text-sm text-muted-foreground">
+          <nav className="flex justify-center space-x-4">
+            <a href="#" className="hover:underline">Privacy Policy</a>
+            <a href="#" className="hover:underline">Terms of Service</a>
+            <a href="#" className="hover:underline">Contact Us</a>
+          </nav>
+        </footer>
       </div>
     </div>
   );
@@ -36,7 +50,7 @@ const Sidebar = () => (
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <NavLink to="/" className="flex items-center gap-2 font-semibold">
           <Package2 className="h-6 w-6" />
-          <span>Acme Inc</span>
+          <span>FinDash</span>
         </NavLink>
       </div>
       <div className="flex-1">
@@ -68,10 +82,11 @@ const MobileSidebar = () => (
           className="flex items-center gap-2 text-lg font-semibold mb-4"
         >
           <Package2 className="h-6 w-6" />
-          <span className="sr-only">Acme Inc</span>
+          <span>FinDash</span>
         </NavLink>
         {navItems.map((item) => (
           <SidebarNavLink key={item.to} to={item.to}>
+            {item.icon}
             {item.title}
           </SidebarNavLink>
         ))}
@@ -91,8 +106,8 @@ const UserDropdown = () => (
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
       <DropdownMenuSeparator />
+      <DropdownMenuItem>Profile</DropdownMenuItem>
       <DropdownMenuItem>Settings</DropdownMenuItem>
-      <DropdownMenuItem>Support</DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem>Logout</DropdownMenuItem>
     </DropdownMenuContent>
@@ -106,6 +121,22 @@ const SidebarNavLink = ({ to, children }) => (
       cn(
         "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary text-muted-foreground",
         isActive && "text-primary bg-muted",
+      )
+    }
+  >
+    {children}
+  </NavLink>
+);
+
+const NavItem = ({ to, children }) => (
+  <NavLink
+    to={to}
+    className={({ isActive }) =>
+      cn(
+        "transition-colors",
+        isActive
+          ? "text-foreground"
+          : "text-muted-foreground hover:text-foreground",
       )
     }
   >
